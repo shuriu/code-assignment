@@ -6,7 +6,7 @@ class Partner < ActiveRecord::Base
   has_many :owned_vehicles, class_name: "Vehicle", foreign_key: "owner_id"
 
   def total_days_charged_for_all_driver_insurance_policies
-
+    driver_insurances.map(&:numds).reduce(:+)
   end
 
   def self.driver_insurance_p(driver_insurance)
