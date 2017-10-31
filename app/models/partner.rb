@@ -6,10 +6,11 @@ class Partner < ActiveRecord::Base
   has_many :owned_vehicles, class_name: "Vehicle", foreign_key: "owner_id"
 
   # Instance methods
-  def days_for_all_insurance_policies
+  def total_insurance_days
     driver_insurances.map(&:days).reduce(:+)
   end
 
-  def total_vehicle_owner_insurance_v2_charges_pounds
+  def total_insurance_price
+    driver_insurances.map(&:policy_price).reduce(:+)
   end
 end
