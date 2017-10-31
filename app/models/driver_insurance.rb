@@ -8,13 +8,17 @@
 # however you can assume that they will not overlap further than this.
 
 class DriverInsurance < ActiveRecord::Base
-
+  # Relationships
   belongs_to :driver, class_name:  "Partner"
   belongs_to :vehicle
 
-  def numds
-    number_of_hours = (end_date - start_date).to_f * 24
-    return number_of_hours / 24 # convert to days
+  # Instance methods
+  def days
+    (end_date - start_date).to_i
   end
 
+  # Class methods
+  def policy_price
+    days * vehicle.driver_insurance_daily_rate_pounds
+  end
 end

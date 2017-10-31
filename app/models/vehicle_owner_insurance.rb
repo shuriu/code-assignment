@@ -13,7 +13,7 @@ class VehicleOwnerInsurance < ActiveRecord::Base
   end
 
   def total_days_charged_for
-    # total_days_covered - vehicle.driver_insurances.map{|driver_insurance| driver_insurance.numds}.sum
+    # total_days_covered - vehicle.driver_insurances.map{|driver_insurance| driver_insurance.days}.sum
     # Does not seem to work!!
 
     return 4
