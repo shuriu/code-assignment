@@ -17,6 +17,10 @@ class DriverInsurance < ActiveRecord::Base
     (end_date - start_date).to_i
   end
 
+  def as_range
+    (start_date..end_date)
+  end
+
   # Class methods
   def policy_price
     days * vehicle.driver_insurance_daily_rate_pounds

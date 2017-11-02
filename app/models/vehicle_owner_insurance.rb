@@ -7,23 +7,39 @@
 class VehicleOwnerInsurance < ActiveRecord::Base
   # Relationships
   belongs_to :vehicle
+  has_many :driver_insurances, through: :vehicle
+
+  # Scopes
+  scope :active_on_date, -> (date) { where(":date BETWEEN start_date AND end_date", date: date) }
 
   # Instance methods
+  def as_range
+    (start_date..end_date)
+  end
+
   def total_days_covered
     (end_date - start_date).to_i + 1
   end
 
   def total_days_charged_for
-    days_covered = (start_date..end_date).to_a
+    covered_dates.size
+  end
 
-    vehicle.driver_insurances.each do |driver_insurance|
-      days_covered -= (driver_insurance.start_date..driver_insurance.end_date).to_a
+  def covered_dates
+    dates = as_range.to_a
+
+    driver_insurances.each do |driver_insurance|
+      dates -= driver_insurance.as_range.to_a
     end
 
-    days_covered.size
+    dates
+  end
+
+  def vehicle_daily_rate
+    vehicle.vehicle_owner_insurance_daily_rate_pounds
   end
 
   def total_charge_pounds
-    total_days_charged_for * vehicle.vehicle_owner_insurance_daily_rate_pounds
+    total_days_charged_for * vehicle_daily_rate
   end
 end
